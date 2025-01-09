@@ -1,5 +1,6 @@
 # **Incident Response Capstone: Comprehensive Investigation and Remediation Report**
-## **Table of Contents**
+
+# **Table of Contents**
 - [Overview](#overview)
 - [Steps Taken](#steps-taken)
   - [1. Initial Identification of File Inaccessibility](#1-initial-identification-of-file-inaccessibility)
