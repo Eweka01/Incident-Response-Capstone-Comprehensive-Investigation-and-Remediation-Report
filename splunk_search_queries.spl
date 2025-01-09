@@ -1,0 +1,88 @@
+
+## Splunk Search Queries Used in the Incident Response Capstone
+
+### 1. Tracing the Initial Infection Vector
+```
+index=main sourcetype="WinEventLog:Security" EventCode=4688
+| search CommandLine="*Emoji Downloader.exe*"
+| table _time, ComputerName, UserName, CommandLine, ParentImage
+```
+
+### 2. Investigating Download Source
+```
+index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=1
+| search Image="C:\Users\*\Downloads\Emoji Downloader.exe"
+| table _time, ComputerName, User, SourceIp, DestinationIp, CommandLine
+```
+
+### 3. Registry Key Persistence Mechanism
+```
+index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=13
+| search TargetObject="*\Software\Microsoft\Windows\CurrentVersion\Run\AiqGZDHuC"
+| table _time, User, TargetObject, Details
+```
+
+### 4. Investigating Lateral Movement
+#### 4.1 Identifying SMB Connections
+```
+index=main sourcetype="WinEventLog:Security" EventCode=4624
+| search LogonType=3 TargetDomain=DomainAdmin
+| table _time, ComputerName, TargetUserName, IpAddress, LogonType
+```
+
+#### 4.2 Logon Activity Analysis
+```
+index=main sourcetype="WinEventLog:Security" EventCode=4648
+| table _time, SubjectUserName, TargetUserName, TargetServer, IpAddress
+```
+
+### 5. Investigating Website Defacement
+#### 5.1 Identifying Malicious File Placement
+```
+index=webserver_logs sourcetype="apache:access"
+| search url="/profiles.php"
+| table _time, ClientIp, HttpMethod, HttpStatus, Uri
+```
+
+#### 5.2 Command Execution
+```
+index=webserver_logs sourcetype="apache:access"
+| search Uri="/index.php" params="cmd=*"
+| table _time, ClientIp, HttpMethod, Uri, Params
+```
+
+### 6. Detecting Cron Job Creation for Persistence
+```
+index=main sourcetype="linux:syslog"
+| search "*crontab*"
+| table _time, User, Command
+```
+
+### 7. Ransomware File Encryption Logs
+```
+index=main sourcetype="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventCode=11
+| search TargetFilename="*.encrypted"
+| table _time, ComputerName, User, TargetFilename, Image
+```
+
+### 8. Network Traffic Analysis
+#### 8.1 Analyzing Outbound Connections
+```
+index=main sourcetype="firewall_logs"
+| search Action="allow" DestinationIp="11.0.178.14"
+| table _time, SourceIp, DestinationIp, BytesSent, BytesReceived
+```
+
+#### 8.2 Detecting Data Exfiltration
+```
+index=main sourcetype="firewall_logs"
+| search BytesSent>50000000
+| table _time, SourceIp, DestinationIp, BytesSent
+```
+
+### 9. Antivirus and Malware Detection
+```
+index=main sourcetype="WinEventLog:Security" EventCode=7036
+| search Message="Windows Defender scanned *"
+| table _time, ComputerName, Message, Status
+```
