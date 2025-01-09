@@ -1,7 +1,7 @@
 # **Incident Response Capstone: Comprehensive Investigation and Remediation Report**
 
 ## **Overview**
-This project demonstrates a detailed incident response process during a simulated ransomware attack. The steps include identification, investigation, lateral movement analysis, website defacement recovery, and final incident remediation. It was conducted in a RangeForce virtual environment and showcases both technical skills and analytical expertise required for incident response roles.
+This project demonstrates a detailed incident response process during a simulated ransomware attack. The steps include identification, investigation, lateral movement analysis, website defacement recovery, and final incident remediation. It was conducted in a RangeForce virtual environment and showcased both technical skills and analytical expertise required for incident response roles.
 
 ---
 
