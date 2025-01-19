@@ -1,4 +1,4 @@
-# **Incident Response Capstone: Comprehensive Investigation and Remediation Report**
+# **End-to-End Cybersecurity Investigation & Threat Remediation Capstone**
 
 # **Table of Contents**
 - [Overview](#overview)
